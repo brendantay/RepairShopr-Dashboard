@@ -5,3 +5,4 @@ function clock() {
     let d = new Date();
     document.getElementById("time").innerHTML = d.toLocaleTimeString();
 }
+

@@ -11,6 +11,7 @@ const InvoiceItem = require('./models/invoice.js');
 const app = express();
 const port = process.env.PORT || 3000;
 const s = scheduler;
+const clients = [];
 
 const server = app.listen(port, function () {
     console.log('[SERVER]: Started on port: ' + port);
@@ -19,8 +20,6 @@ const server = app.listen(port, function () {
 app.use(express.static('public'));
 
 const io = socket(server);
-
-const clients = [];
 
 io.on('connection', function (socket) {
     console.log('[SERVER]: User connected');
@@ -42,9 +41,12 @@ io.on('connection', function (socket) {
 
 function emitData() {
     let x = storage.getInvoiceData();
-    io.emit('invoiceCount', x.length);
-    io.emit('invoice', x.subtotal);
-    io.emit('utc', x.utc);
+    apiRequest.getWeatherData().then(function (val) {
+        io.emit('weather', val);
+    });
+    io.emit('invoiceCount', x[0].length);
+    io.emit('invoice', x[0].subtotal);
+    io.emit('utc', x[0].utc);
 }
 
 function stop() {
