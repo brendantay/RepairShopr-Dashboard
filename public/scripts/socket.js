@@ -16,9 +16,9 @@ socket.on('invoice', function (data) {
     subtotal.innerText = data;
 });
 socket.on('weather', function (data) {
-    console.log();
-    icon.innerHTML = `<i class="wi wi-owm-${data.weather[0].id}"></i>  ${data.main.temp.toFixed()}  <i class="wi wi-celsius" style="font-size: 120%"></i>`;
-    weatherInfo.innerText = data.weather[0].description;
+    let temp  = parseInt(data[0][0].temp);
+    icon.innerHTML = `<i class="wi wi-owm-${data[0][0].cod}"></i>  ${temp}  <i class="wi wi-celsius" style="font-size: 120%"></i>`;
+    weatherInfo.innerText = data[0][0].desc;
 });
 
 
