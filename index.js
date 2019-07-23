@@ -4,9 +4,6 @@ const apiRequest = require('./modules/getApiData.js');
 const express = require('express');
 const socket = require('socket.io');
 const scheduler = require('node-schedule');
-const request = require('request');
-
-const InvoiceItem = require('./models/invoice.js');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -67,20 +64,11 @@ function run() {
 
 function setData() {
   io.emit('loading');
-  const utc = new Date().toJSON().slice(0, 10);
-  const apiKey = process.env.API_KEY;
-  const url = `https://irepairnow.repairshopr.com/api/v1/invoices?api_key=${apiKey}&date=${utc}`;
-  request(url, function(error, response, body) {
-    InvoiceItem.deleteMany({}).exec().then((result) => {
-      // console.log(result);
-    }).catch((err) => {
-      console.log(err);
-    });
 
-    body = JSON.parse(body);
-    storage.storeInvoiceData(body);
-
+  apiRequest.getRepairShoprData().then(function(val) {
+    storage.storeInvoiceData(val);
   });
+
   apiRequest.getWeatherData().then(function(val) {
     storage.storeWeatherData(val);
   });

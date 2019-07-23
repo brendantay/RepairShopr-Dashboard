@@ -4,10 +4,12 @@ const WeatherItem = require('../models/weather.js');
 
 let invoiceLength = 0;
 let subtotal = 0;
-
+//TODO: Refactor this shitty code
 mongoose.connect('mongodb://localhost:27017/invoice', {useNewUrlParser: true});
 
 const storeInvoiceData = (body) => {
+  InvoiceItem.deleteMany({}).exec();
+
   for (let i = 0; i < body.invoices.length - 1; i++) {
     const invoiceItem = new InvoiceItem({
       id: body.invoices[i].id,
