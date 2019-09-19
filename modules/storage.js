@@ -9,8 +9,7 @@ mongoose.connect('mongodb://localhost:27017/invoice', {useNewUrlParser: true});
 
 const storeInvoiceData = (body) => {
   InvoiceItem.deleteMany({}).exec();
-
-  for (let i = 0; i < body.invoices.length - 1; i++) {
+  for (let i = 0; i < body.invoices.length; i++) {
     const invoiceItem = new InvoiceItem({
       id: body.invoices[i].id,
       invoiceId: body.invoices[i]['number'],
@@ -21,7 +20,7 @@ const storeInvoiceData = (body) => {
       date: body.invoices[i]['date'],
     });
     invoiceItem.save().then((result) => {
-      // console.log(result)
+       // console.log(result)
     }).catch((err) => {
       console.log(err);
     });
